@@ -272,7 +272,7 @@ const Homepage = () => {
               </IconButton>
               <IconButton 
                 aria-label="Instagram" 
-                href="https://www.instagram.com/yourprofile" 
+                href="https://www.instagram.com/__al.tunechi" 
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{ 
