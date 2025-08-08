@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   AppBar,
   Toolbar,
@@ -11,15 +11,19 @@ import {
   Divider,
   createTheme,
   ThemeProvider,
-  CssBaseline
+  CssBaseline,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText
 } from '@mui/material';
 import { 
   Twitter,
   Instagram,
-  YouTube
+  YouTube,
+  Menu as MenuIcon
 } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
-
 
 // Create purple theme
 const theme = createTheme({
@@ -55,6 +59,23 @@ const TikTok = () => (
 );
 
 const Homepage = () => {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  // Navigation items
+  const navItems = [
+    { text: 'Home', path: '/' },
+    { text: 'Gallery', path: '/gallery' },
+    { text: 'Shop', path: '/shop' },
+    { text: 'Predictions', path: '/prediction' },
+    { text: 'Blog', path: '/blog' },
+    { text: 'Events', path: '/events' },
+    { text: 'Partners', path: '/partners' },
+  ];
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -62,111 +83,105 @@ const Homepage = () => {
         {/* Navbar */}
         <AppBar position="static" sx={{ mb: 4 }}>
           <Toolbar>
-            <img 
-        src={require('./assets/Benderspodlogo1.jpeg')} 
-        alt="Benders Pod" 
-        style={{ 
-          height: '40px', // Adjust to match your navbar height
-          width: 'auto',
-          maxWidth: '200px' // Prevent logo from being too wide
-        }} 
-      />
-          
-            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <Link 
-                component={RouterLink}
-                to="/"
-                color="inherit" 
-                sx={{ 
-                  mx: 1.5, 
-                  textDecoration: 'none', 
-                  fontSize: '0.9rem',
-                  '&:hover': { color: '#f3e5f5' }
-                }}
-              >
-                Home
-              </Link>
-              <Link 
-                component={RouterLink}
-                to="/gallery"
-                color="inherit" 
-                sx={{ 
-                  mx: 1.5, 
-                  textDecoration: 'none', 
-                  fontSize: '0.9rem',
-                  '&:hover': { color: '#f3e5f5' }
-                }}
-              >
-                Gallery
-              </Link>
-              <Link 
-                component={RouterLink}
-                to="/shop"
-                color="inherit" 
-                sx={{ 
-                  mx: 1.5, 
-                  textDecoration: 'none', 
-                  fontSize: '0.9rem',
-                  '&:hover': { color: '#f3e5f5' }
-                }}
-              >
-                Shop
-              </Link>
-              <Link 
-                component={RouterLink}
-                to="/prediction"
-                color="inherit" 
-                sx={{ 
-                  mx: 1.5, 
-                  textDecoration: 'none', 
-                  fontSize: '0.9rem',
-                  '&:hover': { color: '#f3e5f5' }
-                }}
-              >
-                Predictions
-              </Link>
-              <Link 
-                component={RouterLink}
-                to="/blog"
-                color="inherit" 
-                sx={{ 
-                  mx: 1.5, 
-                  textDecoration: 'none', 
-                  fontSize: '0.9rem',
-                  '&:hover': { color: '#f3e5f5' }
-                }}
-              >
-                Blog
-              </Link>
-              <Link 
-                component={RouterLink}
-                to="/events"
-                color="inherit" 
-                sx={{ 
-                  mx: 1.5, 
-                  textDecoration: 'none', 
-                  fontSize: '0.9rem',
-                  '&:hover': { color: '#f3e5f5' }
-                }}
-              >
-                Events
-              </Link>
-              <Link 
-                component={RouterLink}
-                to="/partners"
-                color="inherit" 
-                sx={{ 
-                  mx: 1.5, 
-                  textDecoration: 'none', 
-                  fontSize: '0.9rem',
-                  '&:hover': { color: '#f3e5f5' }
-                }}
-              >
-                Partners
-              </Link>
+            {/* Logo with RouterLink */}
+            <Box 
+              component={RouterLink}
+              to="/"
+              sx={{ 
+                display: 'flex',
+                alignItems: 'center',
+                textDecoration: 'none',
+                flexGrow: 1
+              }}
+            >
+              <img 
+                src={require('./assets/Benderspodlogo1.jpeg')} 
+                alt="Benders Pod" 
+                style={{ 
+                  height: '40px',
+                  width: 'auto',
+                  maxWidth: '200px'
+                }} 
+              />
+            </Box>
+            
+            {/* Mobile menu button */}
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="end"
+              onClick={handleDrawerToggle}
+              sx={{ 
+                display: { md: 'none' },
+                ml: 'auto'
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+
+            {/* Desktop links */}
+            <Box sx={{ 
+              display: { xs: 'none', md: 'flex' },
+              ml: 'auto'
+            }}>
+              {navItems.map((item) => (
+                <Link 
+                  key={item.text}
+                  component={RouterLink}
+                  to={item.path}
+                  color="inherit" 
+                  sx={{ 
+                    mx: 1.5, 
+                    textDecoration: 'none',
+                    fontSize: '0.9rem',
+                    '&:hover': { color: '#f3e5f5' }
+                  }}
+                >
+                  {item.text}
+                </Link>
+              ))}
             </Box>
           </Toolbar>
         </AppBar>
+
+        {/* Mobile drawer */}
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true,
+          }}
+          sx={{
+            display: { xs: 'block', md: 'none' },
+            '& .MuiDrawer-paper': {
+              width: 240,
+              bgcolor: 'primary.dark',
+              color: 'white'
+            }
+          }}
+        >
+          <Box onClick={handleDrawerToggle} sx={{ p: 2 }}>
+            <List>
+              {navItems.map((item) => (
+                <ListItem 
+                  button 
+                  key={item.text}
+                  component={RouterLink}
+                  to={item.path}
+                  sx={{
+                    color: 'white',
+                    '&:hover': {
+                      bgcolor: 'primary.light'
+                    }
+                  }}
+                >
+                  <ListItemText primary={item.text} />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Drawer>
 
         {/* Main Content */}
         <Container maxWidth="md" sx={{ flex: 1 }}>
