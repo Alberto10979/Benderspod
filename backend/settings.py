@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 allowed_hosts_str = os.getenv('ALLOWED_HOSTS', '[]')  # Default empty list
 ALLOWED_HOSTS = json.loads(allowed_hosts_str)
 
-DEBUG=True
+DEBUG=False
 
 
 # Application definition
@@ -89,10 +89,20 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 # settings.py
+#DATABASES = {
+   # 'default': {
+    #    'ENGINE': 'django.db.backends.sqlite3',
+       # 'NAME': BASE_DIR / 'db.sqlite3',
+   # }
+#}
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.getenv('DB_ENGINE'),
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
