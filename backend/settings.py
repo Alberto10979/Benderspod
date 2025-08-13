@@ -28,8 +28,11 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Get ALLOWED_HOSTS from environment variable
-allowed_hosts_str = os.getenv('ALLOWED_HOSTS', '[]')  # Default empty list
-ALLOWED_HOSTS = json.loads(allowed_hosts_str)
+allowed_hosts_str = os.getenv('ALLOWED_HOSTS', '["*"]')  # Default to wildcard if not set
+try:
+    ALLOWED_HOSTS = ast.literal_eval(allowed_hosts_str)  # More forgiving than json.loads
+except (ValueError, SyntaxError):
+    ALLOWED_HOSTS = ['*']
 
 DEBUG=False
 
