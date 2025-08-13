@@ -1,1 +1,1 @@
-gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT --worker-class sync --timeout 120 --proxy-protocol
+web: gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120
