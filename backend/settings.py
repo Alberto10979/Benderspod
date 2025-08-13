@@ -177,3 +177,8 @@ CSRF_TRUSTED_ORIGINS = [
     'https://benderspod-production.up.railway.app',
     'https://benderspod.co.ke',  # If using custom domain
 ]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
