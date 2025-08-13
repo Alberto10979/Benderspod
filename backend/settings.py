@@ -38,9 +38,9 @@ DEBUG=False
 
 
 # Application definition
-
-INSTALLED_APPS = [
   # Before django.contrib.staticfiles
+INSTALLED_APPS = [
+
 
     'django.contrib.admin',
     'django.contrib.auth',
