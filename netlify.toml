@@ -1,0 +1,12 @@
+[build]
+  # Build commands and directories
+  command = "npm run build"
+  publish = "build/"  # For Create React App (use "dist/" for Vite)
+
+
+
+[[redirects]]
+  # Handle client-side routing - ALL routes point to index.html
+  from = "/*"
+  to = "/index.html"
+  status = 200
