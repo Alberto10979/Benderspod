@@ -165,3 +165,9 @@ REST_FRAMEWORK = {
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# Ensure HTTPS is recognized
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_TRUSTED_ORIGINS = [
+    'https://benderspod-production.up.railway.app',
+    'https://benderspod.co.ke',  # If using custom domain
+]
