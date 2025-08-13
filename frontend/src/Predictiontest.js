@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Container, 
   Typography, 
@@ -11,7 +11,12 @@ import {
   Avatar,
   Snackbar,
   Alert,
-  IconButton
+  IconButton,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  CircularProgress
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -86,22 +91,52 @@ const TeamScoreControl = ({ team, logo, score, onIncrement, onDecrement }) => {
   );
 };
 
-const Prediction = () => {
-  const teams = {
-    home: {
-      name: 'Manchester United',
-      logo: 'https://cdn.sportmonks.com/images/soccer/teams/14/14.png'
-    },
-    away: {
-      name: 'Arsenal',
-      logo: 'https://cdn.sportmonks.com/images/soccer/teams/19/19.png'
-    }
-  };
-
+const Predictiontest = () => {
+  const API_TOKEN = 'PbixzLB9hVpUVr8LeyPeTrmZqtirleapenI1L8dPILtjDhfkdlPkGoVRlQrA';
+  const [matches, setMatches] = useState([]);
+  const [selectedMatch, setSelectedMatch] = useState(null);
   const [homeScore, setHomeScore] = useState(0);
   const [awayScore, setAwayScore] = useState(0);
   const [username, setUsername] = useState('');
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchUpcomingMatches = async () => {
+      try {
+        setLoading(true);
+        // Using CORS proxy for development
+        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+        const apiUrl = `https://api.sportmonks.com/v3/football/fixtures/upcoming?api_token=${API_TOKEN}&include=participants&per_page=10`;
+        
+        const response = await fetch(proxyUrl + apiUrl, {
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch matches');
+        }
+        
+        const data = await response.json();
+        setMatches(data.data);
+        
+        // Select the first match by default
+        if (data.data.length > 0) {
+          setSelectedMatch(data.data[0]);
+        }
+      } catch (err) {
+        setError(err.message);
+        setSnackbar({ open: true, message: 'Error loading matches. You might need to visit the CORS proxy page first.', severity: 'error' });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUpcomingMatches();
+  }, []);
 
   const handleIncrement = (team) => {
     if (team === 'home') {
@@ -125,8 +160,25 @@ const Prediction = () => {
       return;
     }
 
+    if (!selectedMatch) {
+      setSnackbar({ open: true, message: 'Please select a match', severity: 'error' });
+      return;
+    }
+
     try {
-      // Replace with your actual API call
+      // Get home and away team from participants
+      const homeTeam = selectedMatch.participants.find(p => p.meta.location === 'home');
+      const awayTeam = selectedMatch.participants.find(p => p.meta.location === 'away');
+
+      // For testing, we'll just show a success message
+      setSnackbar({ 
+        open: true, 
+        message: `Prediction submitted successfully! (${homeTeam?.name} ${homeScore}-${awayScore} ${awayTeam?.name})`, 
+        severity: 'success' 
+      });
+      
+      // In a real app, you would send this to your backend:
+      /*
       const response = await fetch('/api/predictions', {
         method: 'POST',
         headers: {
@@ -134,22 +186,20 @@ const Prediction = () => {
         },
         body: JSON.stringify({
           username,
-          homeTeam: teams.home.name,
-          awayTeam: teams.away.name,
+          fixtureId: selectedMatch.id,
+          homeTeam: homeTeam.name,
+          awayTeam: awayTeam.name,
           homeScore,
-          awayScore
+          awayScore,
+          matchDate: selectedMatch.starting_at
         }),
       });
-
-      if (response.ok) {
-        setSnackbar({ open: true, message: 'Prediction submitted successfully!', severity: 'success' });
-        // Reset form
-        setHomeScore(0);
-        setAwayScore(0);
-        setUsername('');
-      } else {
-        throw new Error('Failed to submit prediction');
-      }
+      */
+      
+      // Reset form
+      setHomeScore(0);
+      setAwayScore(0);
+      setUsername('');
     } catch (error) {
       setSnackbar({ open: true, message: 'Error submitting prediction', severity: 'error' });
     }
@@ -158,6 +208,44 @@ const Prediction = () => {
   const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
   };
+
+  const handleMatchChange = (event) => {
+    const matchId = event.target.value;
+    const match = matches.find(m => m.id === matchId);
+    setSelectedMatch(match);
+    setHomeScore(0);
+    setAwayScore(0);
+  };
+
+  if (loading) {
+    return (
+      <Container maxWidth="sm" sx={{ py: 3, display: 'flex', justifyContent: 'center' }}>
+        <CircularProgress />
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container maxWidth="sm" sx={{ py: 3 }}>
+        <Alert severity="error">
+          {error} - You might need to visit the <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank" rel="noopener noreferrer">CORS Anywhere demo page</a> first to enable the proxy.
+        </Alert>
+      </Container>
+    );
+  }
+
+  if (!selectedMatch || matches.length === 0) {
+    return (
+      <Container maxWidth="sm" sx={{ py: 3 }}>
+        <Alert severity="info">No upcoming matches available for prediction</Alert>
+      </Container>
+    );
+  }
+
+  // Get home and away team from participants
+  const homeTeam = selectedMatch.participants.find(p => p.meta.location === 'home');
+  const awayTeam = selectedMatch.participants.find(p => p.meta.location === 'away');
 
   return (
     <Container maxWidth="sm" sx={{ py: 3 }}>
@@ -179,8 +267,33 @@ const Prediction = () => {
           >
             Benderspod Match Prediction
           </Typography>
+          
+          {/* Match Selection Dropdown */}
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel id="match-select-label">Select Match</InputLabel>
+            <Select
+              labelId="match-select-label"
+              value={selectedMatch.id}
+              label="Select Match"
+              onChange={handleMatchChange}
+            >
+              {matches.map(match => {
+                const home = match.participants.find(p => p.meta.location === 'home');
+                const away = match.participants.find(p => p.meta.location === 'away');
+                return (
+                  <MenuItem key={match.id} value={match.id}>
+                    {home?.name} vs {away?.name} - {new Date(match.starting_at).toLocaleString()}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+          
           <Typography variant="subtitle1" sx={{ color: 'text.secondary' }}>
-            {teams.home.name} vs {teams.away.name}
+            {homeTeam?.name} vs {awayTeam?.name}
+          </Typography>
+          <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+            {new Date(selectedMatch.starting_at).toLocaleString()}
           </Typography>
         </Box>
 
@@ -189,8 +302,8 @@ const Prediction = () => {
         {/* Score Controls */}
         <Grid container justifyContent="space-around" alignItems="center" sx={{ mb: 3 }}>
           <TeamScoreControl 
-            team={teams.home.name}
-            logo={teams.home.logo}
+            team={homeTeam?.name}
+            logo={homeTeam?.image_path}
             score={homeScore}
             onIncrement={() => handleIncrement('home')}
             onDecrement={() => handleDecrement('home')}
@@ -201,8 +314,8 @@ const Prediction = () => {
           </Grid>
 
           <TeamScoreControl 
-            team={teams.away.name}
-            logo={teams.away.logo}
+            team={awayTeam?.name}
+            logo={awayTeam?.image_path}
             score={awayScore}
             onIncrement={() => handleIncrement('away')}
             onDecrement={() => handleDecrement('away')}
@@ -293,4 +406,4 @@ const Prediction = () => {
   );
 };
 
-export default Prediction;
+export default Predictiontest;

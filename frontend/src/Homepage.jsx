@@ -285,7 +285,7 @@ const Homepage = () => {
               </IconButton>
               <IconButton 
                 aria-label="YouTube" 
-                href="https://www.youtube.com/yourchannel" 
+                href="https://www.youtube.com/@TheBenders_Pod" 
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{ 

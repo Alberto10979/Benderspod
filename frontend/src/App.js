@@ -9,6 +9,7 @@ import Gallery from './Gallery';
 import Events from './Events';
 import Partners from './Partners';
 import Shop from './Shop';
+import Predictiontest from './Predictiontest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 const queryClient = new QueryClient();
 
@@ -25,6 +26,9 @@ function App() {
              <Route path="/prediction" element={<Prediction />} />
               <Route path="/about" element={<About/>}/>
                <Route path="/shop" element={<Shop />} />
+               <Route path="/predictiontest" element={<Predictiontest />} />
+
+
 
 
       </Routes>
