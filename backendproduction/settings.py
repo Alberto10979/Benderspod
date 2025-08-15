@@ -31,14 +31,13 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = False
 
 # Parse ALLOWED_HOSTS from .env
-def get_allowed_hosts():
-    try:
-        hosts = os.environ.get('ALLOWED_HOSTS', '["localhost", "127.0.0.1"]')  # Default fallback
-        return json.loads(hosts.replace("'", '"'))  # Handle both quote styles
-    except json.JSONDecodeError:
-        return ['localhost', '127.0.0.1']  # Fallback if parsing fails
+ALLOWED_HOSTS = ['*'] if DEBUG else [
+    'benderspod-production-1776.up.railway.app',
+    'www.benderspod.co.ke',
+    'benderspod.co.ke',
+    'localhost,127.0.0.1',
 
-ALLOWED_HOSTS = get_allowed_hosts()
+]
 
 
 # Application definition
