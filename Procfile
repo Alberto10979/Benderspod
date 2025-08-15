@@ -1,1 +1,1 @@
-web: gunicorn backendproduction.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+web: gunicorn backendproduction.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120 --proxy-protocol --forwarded-allow-ips="*" --access-logfile - --error-logfile -
