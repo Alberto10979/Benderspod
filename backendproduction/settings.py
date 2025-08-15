@@ -31,14 +31,13 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = False
 
 # Parse ALLOWED_HOSTS 
-ALLOWED_HOSTS = ['*'] 
-#if DEBUG else [
- #   'benderspod-production-1776.up.railway.app',
-  #  'www.benderspod.co.ke',
-   # 'benderspod.co.ke',
-    #'localhost,127.0.0.1',
+ALLOWED_HOSTS = ['*'] if DEBUG else [
+  'benderspod-production-1776.up.railway.app',
+    'www.benderspod.co.ke',
+    'benderspod.co.ke',
+    'localhost,127.0.0.1',
 
-#]
+]
 
 
 # Application definition
