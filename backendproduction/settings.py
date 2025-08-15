@@ -28,16 +28,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-# Parse ALLOWED_HOSTS from .env
-ALLOWED_HOSTS = ['*'] if DEBUG else [
-    'benderspod-production-1776.up.railway.app',
-    'www.benderspod.co.ke',
-    'benderspod.co.ke',
-    'localhost,127.0.0.1',
+# Parse ALLOWED_HOSTS 
+ALLOWED_HOSTS = ['*'] 
+#if DEBUG else [
+ #   'benderspod-production-1776.up.railway.app',
+  #  'www.benderspod.co.ke',
+   # 'benderspod.co.ke',
+    #'localhost,127.0.0.1',
 
-]
+#]
 
 
 # Application definition
