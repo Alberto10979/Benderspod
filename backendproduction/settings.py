@@ -39,6 +39,7 @@ def get_allowed_hosts():
         return ['localhost', '127.0.0.1']  # Fallback if parsing fails
 
 ALLOWED_HOSTS = get_allowed_hosts()
+CSRF_TRUSTED_ORIGINS=["https://benderspod-production-1776.up.railway.app/","https://benderspodpod.co.ke/"]
 
 
 # Application definition
