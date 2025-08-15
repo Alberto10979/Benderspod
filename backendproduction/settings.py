@@ -39,7 +39,6 @@ def get_allowed_hosts():
         return ['localhost', '127.0.0.1']  # Fallback if parsing fails
 
 ALLOWED_HOSTS = get_allowed_hosts()
-CSRF_TRUSTED_ORIGINS=["https://benderspod-production-1776.up.railway.app/","https://benderspodpod.co.ke/"]
 
 
 # Application definition
@@ -147,3 +146,12 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# In settings.py
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True  # Redirect HTTP to HTTPS
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = [
+    'https://benderspod-production-1776.up.railway.app',
+    'https://benderspod.co.ke'
+]
