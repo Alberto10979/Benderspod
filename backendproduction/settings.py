@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import json
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,9 +28,17 @@ load_dotenv(os.path.join(BASE_DIR,'.env'))
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+# Parse ALLOWED_HOSTS from .env
+def get_allowed_hosts():
+    try:
+        hosts = os.getenv('ALLOWED_HOSTS', '["localhost", "127.0.0.1"]')  # Default fallback
+        return json.loads(hosts.replace("'", '"'))  # Handle both quote styles
+    except json.JSONDecodeError:
+        return ['localhost', '127.0.0.1']  # Fallback if parsing fails
+
+ALLOWED_HOSTS = get_allowed_hosts()
 
 
 # Application definition
