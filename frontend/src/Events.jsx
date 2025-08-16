@@ -12,7 +12,7 @@ const Events = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get('https://benderspod-production-1776.up.railway.app/api/events/all');
+        const response = await axios.get('https://benderspod-production-1776.up.railway.app/api/events/all/');
         setEvents(response.data);
         setLoading(false);
       } catch (err) {
