@@ -145,3 +145,4 @@ CSRF_TRUSTED_ORIGINS = [
     'https://benderspod.co.ke',
     'https://www.benderspod.co.ke',
 ]
+CORS_ALLOW_CREDENTIALS = True
