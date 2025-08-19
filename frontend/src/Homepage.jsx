@@ -272,7 +272,7 @@ const Homepage = () => {
               </IconButton>
               <IconButton 
                 aria-label="Instagram" 
-                href="https://www.instagram.com/@the_benders_pod" 
+                href="https://www.instagram.com/the_benders_pod" 
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{ 
@@ -298,7 +298,7 @@ const Homepage = () => {
               </IconButton>
               <IconButton 
                 aria-label="TikTok" 
-                href="https://www.tiktok.com/@yourusername" 
+                href="https://www.tiktok.com/_The Benders_Pod" 
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{ 
