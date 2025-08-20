@@ -3,14 +3,18 @@ from .models import Event
 from django.conf import settings
 
 class EventSerializer(serializers.ModelSerializer):
-    image = serializers.SerializerMethodField()
+    image_url = serializers.SerializerMethodField()
     
     class Meta:
         model = Event
-        fields = ['id', 'title', 'description', 'date', 
-                 'location', 'image', 'created_at', 'is_active']
+        fields = ['id', 'title', 'description', 'location', 'image_url']
     
-    def get_image(self, obj):
+    def get_image_url(self, obj):
         if obj.image:
-            return self.context['request'].build_absolute_uri(obj.image.url)
+            try:
+                # This will work with Cloudinary
+                return obj.image.url
+            except:
+                # Fallback if image doesn't exist
+                return None
         return None

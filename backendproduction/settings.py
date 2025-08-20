@@ -37,6 +37,16 @@ MEDIA_ROOT = BASE_DIR / 'media'  # Directory where media files are stored
 # ---------------------------------------------------
 
 # ---------------------------------------------------
+if not DEBUG:
+    # Option 1: Cloudinary (Easier to set up)
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME', default=''),
+        'API_KEY': env('CLOUDINARY_API_KEY', default=''),
+        'API_SECRET': env('CLOUDINARY_API_SECRET', default=''),
+    }
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
 # Installed apps
 # ---------------------------------------------------
 INSTALLED_APPS = [
@@ -46,6 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django-cloudinary-storage',
 
     # Third-party apps
     'rest_framework',
@@ -158,4 +169,4 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-WHITENOISE_ROOT = MEDIA_ROOT
+
