@@ -44,7 +44,7 @@ if not DEBUG:
         'API_KEY': env('CLOUDINARY_API_KEY', default=''),
         'API_SECRET': env('CLOUDINARY_API_SECRET', default=''),
     }
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 # Installed apps
