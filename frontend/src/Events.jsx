@@ -42,10 +42,10 @@ const Events = () => {
       <div className="events-grid">
         {events.map(event => (
           <div key={event.id} className="event-card">
-            {event.image && (
+            {event.image_url && (
               <div className="event-image-container">
                 <img 
-                  src={event.image} 
+                  src={event.image_url} 
                   alt={event.title} 
                   className="event-image"
                   onError={(e) => {
