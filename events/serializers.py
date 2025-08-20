@@ -6,7 +6,7 @@ class EventSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Event
-        fields = ['id', 'title', 'description', 'location', 'image_url', 'created_at', 'updated_at']
+        fields = ['id', 'title','date', 'description', 'location', 'image_url', 'created_at', 'updated_at']
     
     def get_image_url(self, obj):
         if obj.image:
