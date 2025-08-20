@@ -29,6 +29,12 @@ ALLOWED_HOSTS = ['*'] if DEBUG else [
     'localhost',
     '127.0.0.1',
 ]
+# MEDIA FILES CONFIGURATION (ADD THIS)
+# ---------------------------------------------------
+MEDIA_URL = '/media/'  # URL to access media files
+MEDIA_ROOT = BASE_DIR / 'media'  # Directory where media files are stored
+
+# ---------------------------------------------------
 
 # ---------------------------------------------------
 # Installed apps
