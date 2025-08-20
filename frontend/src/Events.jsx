@@ -87,7 +87,7 @@ const Events = () => {
             
             <div className="modal-image-container">
               <img 
-                src={selectedEvent.image || '/placeholder-event.jpg'} 
+                src={selectedEvent.image_url || '/placeholder-event.jpg'} 
                 alt={selectedEvent.title}
                 className="modal-image"
               />
