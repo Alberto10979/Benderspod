@@ -37,14 +37,22 @@ MEDIA_ROOT = BASE_DIR / 'media'  # Directory where media files are stored
 # ---------------------------------------------------
 
 # ---------------------------------------------------
-if not DEBUG:
+#if not DEBUG:
     # Option 1: Cloudinary (Easier to set up)
-    CLOUDINARY_STORAGE = {
-        'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME', default=''),
-        'API_KEY': env('CLOUDINARY_API_KEY', default=''),
-        'API_SECRET': env('CLOUDINARY_API_SECRET', default=''),
-    }
+   # CLOUDINARY_STORAGE = {
+       # 'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME', default=''),
+       # 'API_KEY': env('CLOUDINARY_API_KEY', default=''),
+       # 'API_SECRET': env('CLOUDINARY_API_SECRET', default=''),
+   # }
+#DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': env('CLOUDINARY_API_KEY'),
+    'API_SECRET': env('CLOUDINARY_API_SECRET'),
+}
+
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 
 
 # Installed apps
@@ -55,14 +63,16 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage',  
     'django.contrib.staticfiles',
+    'cloudinary', 
    
 
     # Third-party apps
     'rest_framework',
     'corsheaders',
-    'cloudinary_storage',  
-    'cloudinary', 
+  
+
 
     # Local apps
     'events',
