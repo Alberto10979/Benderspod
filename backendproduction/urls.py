@@ -21,7 +21,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('events.urls')),  # Include the events app URLs
+    path('api/', include('events.urls')), 
+    path('api/', include('partners.urls')),  # Include partners app URLs
+   
+
 
 ]
 # TEMPORARY: Serve media files in production (not recommended for production)

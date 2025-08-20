@@ -66,6 +66,7 @@ INSTALLED_APPS = [
 
     # Local apps
     'events',
+    'partners',
 ]
 
 # ---------------------------------------------------
