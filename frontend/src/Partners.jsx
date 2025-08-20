@@ -11,6 +11,7 @@ const Partners = () => {
   useEffect(() => {
     const fetchPartners = async () => {
       try {
+        setLoading(true);
         const endpoint = selectedType === 'all' 
           ? 'https://benderspod-production-1776.up.railway.app/api/partners/'
           : `https://benderspod-production-1776.up.railway.app/api/partners/${selectedType}/`;
@@ -27,6 +28,17 @@ const Partners = () => {
     fetchPartners();
   }, [selectedType]);
 
+  // Function to construct the full logo URL
+  const getLogoUrl = (logoPath) => {
+    if (!logoPath) return '/placeholder-partner.png';
+    
+    // If it's already a full URL, return as is
+    if (logoPath.startsWith('http')) return logoPath;
+    
+    // Otherwise, construct the full URL using your API base
+    return `https://benderspod-production-1776.up.railway.app${logoPath}`;
+  };
+
   const partnerTypes = [
     { value: 'all', label: 'All Partners' },
     { value: 'sponsor', label: 'Sponsors' },
@@ -35,8 +47,17 @@ const Partners = () => {
     { value: 'technology', label: 'Technology Partners' },
   ];
 
-  if (loading) return <div className="loading-spinner"></div>;
-  if (error) return <div className="error-message">Error: {error}</div>;
+  if (loading) return (
+    <div className="partners-container">
+      <div className="loading-spinner"></div>
+    </div>
+  );
+  
+  if (error) return (
+    <div className="partners-container">
+      <div className="error-message">Error: {error}</div>
+    </div>
+  );
 
   return (
     <div className="partners-container">
@@ -59,7 +80,7 @@ const Partners = () => {
           <div key={partner.id} className="partner-card">
             <div className="partner-logo-container">
               <img 
-                src={partner.logo_url} 
+                src={getLogoUrl(partner.logo_url)} 
                 alt={partner.name}
                 className="partner-logo"
                 onError={(e) => {
@@ -88,7 +109,7 @@ const Partners = () => {
         ))}
       </div>
 
-      {partners.length === 0 && (
+      {partners.length === 0 && !loading && (
         <div className="no-partners">
           <p>No partners found in this category.</p>
         </div>
