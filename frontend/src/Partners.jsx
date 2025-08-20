@@ -7,6 +7,8 @@ const Partners = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedType, setSelectedType] = useState('all');
+  const [selectedPartner, setSelectedPartner] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchPartners = async () => {
@@ -37,6 +39,29 @@ const Partners = () => {
     
     // Otherwise, construct the full URL using your API base
     return `https://benderspod-production-1776.up.railway.app${logoPath}`;
+  };
+
+  // Function to open modal with partner details
+  const openPartnerModal = (partner) => {
+    setSelectedPartner(partner);
+    setIsModalOpen(true);
+    // Prevent body scrolling when modal is open
+    document.body.style.overflow = 'hidden';
+  };
+
+  // Function to close modal
+  const closePartnerModal = () => {
+    setIsModalOpen(false);
+    setSelectedPartner(null);
+    // Re-enable body scrolling
+    document.body.style.overflow = 'auto';
+  };
+
+  // Close modal when clicking outside content
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      closePartnerModal();
+    }
   };
 
   const partnerTypes = [
@@ -77,7 +102,11 @@ const Partners = () => {
 
       <div className="partners-grid">
         {partners.map(partner => (
-          <div key={partner.id} className="partner-card">
+          <div 
+            key={partner.id} 
+            className="partner-card"
+            onClick={() => openPartnerModal(partner)}
+          >
             <div className="partner-logo-container">
               <img 
                 src={getLogoUrl(partner.logo_url)} 
@@ -92,7 +121,15 @@ const Partners = () => {
             <div className="partner-content">
               <h3 className="partner-name">{partner.name}</h3>
               <p className="partner-type">{partner.partner_type}</p>
-              <p className="partner-description">{partner.description}</p>
+              <p className="partner-description">
+                {partner.description.length > 150 
+                  ? `${partner.description.substring(0, 150)}...` 
+                  : partner.description
+                }
+                {partner.description.length > 150 && (
+                  <span className="read-more">Read more</span>
+                )}
+              </p>
               
               {partner.website && (
                 <a 
@@ -100,6 +137,7 @@ const Partners = () => {
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="partner-website"
+                  onClick={(e) => e.stopPropagation()}
                 >
                   Visit Website
                 </a>
@@ -112,6 +150,54 @@ const Partners = () => {
       {partners.length === 0 && !loading && (
         <div className="no-partners">
           <p>No partners found in this category.</p>
+        </div>
+      )}
+
+      {/* Partner Details Modal */}
+      {isModalOpen && selectedPartner && (
+        <div className="modal-backdrop" onClick={handleBackdropClick}>
+          <div className="modal-content">
+            <button className="modal-close" onClick={closePartnerModal}>
+              &times;
+            </button>
+            
+            <div className="modal-header">
+              <div className="modal-logo-container">
+                <img 
+                  src={getLogoUrl(selectedPartner.logo_url)} 
+                  alt={selectedPartner.name}
+                  className="modal-logo"
+                  onError={(e) => {
+                    e.target.src = '/placeholder-partner.png';
+                  }}
+                />
+              </div>
+              <div className="modal-title">
+                <h2>{selectedPartner.name}</h2>
+                <p className="modal-partner-type">{selectedPartner.partner_type}</p>
+              </div>
+            </div>
+
+            <div className="modal-body">
+              <div className="modal-description">
+                <h3>About</h3>
+                <p>{selectedPartner.description}</p>
+              </div>
+
+              {selectedPartner.website && (
+                <div className="modal-website">
+                  <a 
+                    href={selectedPartner.website} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="modal-website-link"
+                  >
+                    Visit Website
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>
