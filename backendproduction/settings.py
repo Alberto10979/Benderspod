@@ -99,7 +99,7 @@ INSTALLED_APPS = [
     # Local apps
     'events',
     'partners',
-    'predictions',  # Add your predictions app if you haven't
+      # Add your predictions app if you haven't
 ]
 
 # ---------------------------------------------------
