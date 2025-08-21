@@ -15,8 +15,8 @@ const Partners = () => {
       try {
         setLoading(true);
         const endpoint = selectedType === 'all' 
-          ? 'https://benderspod-production-1776.up.railway.app/api/partners/'
-          : `https://benderspod-production-1776.up.railway.app/api/partners/${selectedType}/`;
+          ? 'https://benderspod-production-1776.up.railway.app/api/partners/partners'
+          : `https://benderspod-production-1776.up.railway.app/api/partners/partners${selectedType}/`;
         
         const response = await axios.get(endpoint);
         setPartners(response.data);
