@@ -31,15 +31,15 @@ const Partners = () => {
   }, [selectedType]);
 
   // Function to construct the full logo URL
-  const getLogoUrl = (logoPath) => {
-    if (!logoPath) return '/placeholder-partner.png';
+ // const getLogoUrl = (logoPath) => {
+   // if (!logoPath) return '/placeholder-partner.png';
     
     // If it's already a full URL, return as is
-    if (logoPath.startsWith('http')) return logoPath;
+    //if (logoPath.startsWith('http')) return logoPath;
     
     // Otherwise, construct the full URL using your API base
-    return `https://benderspod-production-1776.up.railway.app${logoPath}`;
-  };
+    //return `https://benderspod-production-1776.up.railway.app${logoPath}`;
+  //};
 
   // Function to open modal with partner details
   const openPartnerModal = (partner) => {
@@ -109,7 +109,7 @@ const Partners = () => {
           >
             <div className="partner-logo-container">
               <img 
-                src={getLogoUrl(partner.logo_url)} 
+                src={partner.logo_url} 
                 alt={partner.name}
                 className="partner-logo"
                 onError={(e) => {
@@ -164,7 +164,7 @@ const Partners = () => {
             <div className="modal-header">
               <div className="modal-logo-container">
                 <img 
-                  src={getLogoUrl(selectedPartner.logo_url)} 
+                  src={selectedPartner.logo_url} 
                   alt={selectedPartner.name}
                   className="modal-logo"
                   onError={(e) => {
