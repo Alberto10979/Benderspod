@@ -29,33 +29,55 @@ ALLOWED_HOSTS = ['*'] if DEBUG else [
     'localhost',
     '127.0.0.1',
 ]
-# MEDIA FILES CONFIGURATION (ADD THIS)
-# ---------------------------------------------------
-MEDIA_URL = '/media/'  # URL to access media files
-MEDIA_ROOT = BASE_DIR / 'media'  # Directory where media files are stored
 
 # ---------------------------------------------------
-
+# Cloudinary Configuration - UPDATED
 # ---------------------------------------------------
-#if not DEBUG:
-    # Option 1: Cloudinary (Easier to set up)
-   # CLOUDINARY_STORAGE = {
-       # 'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME', default=''),
-       # 'API_KEY': env('CLOUDINARY_API_KEY', default=''),
-       # 'API_SECRET': env('CLOUDINARY_API_SECRET', default=''),
-   # }
-#DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+import cloudinary
+import cloudinary.api
+import cloudinary.uploader
+
+# Configure Cloudinary
+cloudinary.config(
+    cloud_name=env('CLOUDINARY_CLOUD_NAME'),
+    api_key=env('CLOUDINARY_API_KEY'),
+    api_secret=env('CLOUDINARY_API_SECRET'),
+    secure=True
+)
+
+# Set Cloudinary as default storage for both media and static files
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': env('CLOUDINARY_API_KEY'),
     'API_SECRET': env('CLOUDINARY_API_SECRET'),
+    'SECURE': True,
+    # Optional: Set folder for media files
+    'MEDIA_TAG': 'benderspod_media',
+    # Optional: Set folder for static files
+    'STATIC_TAG': 'benderspod_static',
 }
 
+# Use Cloudinary for media files
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+# Optional: Use Cloudinary for static files too (recommended)
+STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
 
+# Media files configuration (Cloudinary will handle these)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'  # This is fallback, Cloudinary is primary
 
-# Installed apps
+# Static files configuration (Cloudinary will handle these)
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # This is fallback, Cloudinary is primary
+
+# Additional static files directories
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+# ---------------------------------------------------
+# Installed apps - UPDATED ORDER
 # ---------------------------------------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -63,20 +85,21 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'cloudinary_storage',  
+    
+    # Cloudinary apps (must be before staticfiles)
+    'cloudinary',
+    'cloudinary_storage',
+    
     'django.contrib.staticfiles',
-    'cloudinary', 
-   
 
     # Third-party apps
     'rest_framework',
     'corsheaders',
-  
-
 
     # Local apps
     'events',
     'partners',
+    'predictions',  # Add your predictions app if you haven't
 ]
 
 # ---------------------------------------------------
@@ -84,7 +107,8 @@ INSTALLED_APPS = [
 # ---------------------------------------------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # Remove whitenoise if using Cloudinary for static files
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -106,7 +130,7 @@ WSGI_APPLICATION = 'backendproduction.wsgi.application'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -151,18 +175,6 @@ USE_I18N = True
 USE_TZ = True
 
 # ---------------------------------------------------
-# Static files
-# ---------------------------------------------------
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# ---------------------------------------------------
-# Default primary key field type
-# ---------------------------------------------------
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# ---------------------------------------------------
 # Security & HTTPS
 # ---------------------------------------------------
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -179,7 +191,27 @@ CSRF_TRUSTED_ORIGINS = [
 CORS_ALLOWED_ORIGINS = [
     "https://benderspod.co.ke",
     "https://www.benderspod.co.ke",
+    "http://localhost:3000",  # For local development
+    "http://127.0.0.1:3000",  # For local development
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
+# ---------------------------------------------------
+# REST Framework Settings
+# ---------------------------------------------------
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    ],
+}
