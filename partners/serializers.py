@@ -3,32 +3,27 @@ from .models import Partner
 
 class PartnerSerializer(serializers.ModelSerializer):
     logo_url = serializers.SerializerMethodField()
-
+    
     class Meta:
         model = Partner
-        fields = [
-            'id',
+        fields = ['id',
             'name',
             'description',
             'logo_url',
             'website',
             'partner_type',
             'is_active',
-            'created_at',
-        ]
-
+            'created_at',  ]
+    
     def get_logo_url(self, obj):
-        """
-        Returns a full URL for the partner logo.
-        - If using Cloudinary: obj.logo.url is already absolute.
-        - If using local storage: build_absolute_uri() will make it absolute.
-        """
         if obj.logo:
-            url = obj.logo.url
-            if url.startswith("http"):  # Cloudinary or external storage
-                return url
-            request = self.context.get("request")
-            if request:
-                return request.build_absolute_uri(url)
-            return url
+            try:
+                # This will work with both local files and cloud storage
+                request = self.context.get('request')
+                if request:
+                    return request.build_absolute_uri(obj.logo.url)
+                return obj.logo.url
+            except:
+                # Fallback if image doesn't exist or URL generation fails
+                return None
         return None
