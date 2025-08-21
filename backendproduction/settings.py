@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     # Local apps
     'events',
     'partners',
+    'prediction'
 ]
 
 # ---------------------------------------------------
@@ -174,11 +175,14 @@ CSRF_TRUSTED_ORIGINS = [
     'https://benderspod-production-1776.up.railway.app',
     'https://benderspod.co.ke',
     'https://www.benderspod.co.ke',
+    'https://localhost:3000',
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "https://benderspod.co.ke",
     "https://www.benderspod.co.ke",
+     "https://localhost:3000",
+    
 ]
 
 CORS_ALLOW_CREDENTIALS = True

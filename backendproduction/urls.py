@@ -19,13 +19,21 @@ from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('events.urls')), 
-    path('api/', include('partners.urls')),  # Include partners app URLs
+#urlpatterns = [
+ #   path('admin/', admin.site.urls),
+  #  path('api/', include('events.urls')), 
+   # path('api/', include('partners.urls')), 
+    #path('api/', include('prediction.urls')),
    
 
 
-]
+#]
 # TEMPORARY: Serve media files in production (not recommended for production)
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/events/', include(('events.urls', 'events'), namespace='events')), 
+    path('api/partners/', include(('partners.urls', 'partners'), namespace='partners')), 
+    path('api/prediction/', include(('prediction.urls', 'prediction'), namespace='prediction')),
+]
+
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
