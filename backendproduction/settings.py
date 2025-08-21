@@ -4,7 +4,7 @@ from pathlib import Path
 # ---------------------------------------------------
 # Base directory
 # ---------------------------------------------------
-BASE_DIR = Path(_file_).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ---------------------------------------------------
 # Environment variables
