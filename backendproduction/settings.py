@@ -37,7 +37,7 @@ MEDIA_ROOT = BASE_DIR / 'media'  # Directory where media files are stored
 # ---------------------------------------------------
 
 # ---------------------------------------------------
-if not DEBUG:
+if  DEBUG:
     # Option 1: Cloudinary (Easier to set up)
    CLOUDINARY_STORAGE = {
         'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME', default=''),
