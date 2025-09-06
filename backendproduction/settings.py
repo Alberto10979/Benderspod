@@ -29,32 +29,24 @@ ALLOWED_HOSTS = ['*'] if DEBUG else [
     'localhost',
     '127.0.0.1',
 ]
-# MEDIA FILES CONFIGURATION (ADD THIS)
-# ---------------------------------------------------
-MEDIA_URL = '/media/'  # URL to access media files
-MEDIA_ROOT = BASE_DIR / 'media'  # Directory where media files are stored
 
 # ---------------------------------------------------
+# Media & File Storage
+# ---------------------------------------------------
+if DEBUG:
+    # Local dev: store files on filesystem
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
+else:
+    # Production: store files on Cloudinary
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
+        'API_KEY': env('CLOUDINARY_API_KEY'),
+        'API_SECRET': env('CLOUDINARY_API_SECRET'),
+    }
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # ---------------------------------------------------
-if  DEBUG:
-    # Option 1: Cloudinary (Easier to set up)
-   CLOUDINARY_STORAGE = {
-        'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME', default=''),
-        'API_KEY': env('CLOUDINARY_API_KEY', default=''),
-        'API_SECRET': env('CLOUDINARY_API_SECRET', default=''),
-   }
-   DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-#CLOUDINARY_STORAGE = {
-   # 'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
-   # 'API_KEY': env('CLOUDINARY_API_KEY'),
-   # 'API_SECRET': env('CLOUDINARY_API_SECRET'),
-#}
-
-#DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-
-
 # Installed apps
 # ---------------------------------------------------
 INSTALLED_APPS = [
@@ -66,13 +58,10 @@ INSTALLED_APPS = [
     'cloudinary_storage',  
     'django.contrib.staticfiles',
     'cloudinary', 
-   
 
     # Third-party apps
     'rest_framework',
     'corsheaders',
-  
-
 
     # Local apps
     'events',
@@ -175,14 +164,10 @@ CSRF_TRUSTED_ORIGINS = [
     'https://benderspod-production-1776.up.railway.app',
     'https://benderspod.co.ke',
     'https://www.benderspod.co.ke',
-   
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "https://benderspod.co.ke",
     "https://www.benderspod.co.ke",
-    
-    
 ]
-
 CORS_ALLOW_CREDENTIALS = True
