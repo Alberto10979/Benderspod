@@ -33,10 +33,27 @@ ALLOWED_HOSTS = ['*'] if DEBUG else [
 # ---------------------------------------------------
 # Media & File Storage
 # ---------------------------------------------------
+#if DEBUG:
+    # Local dev: store files on filesystem
+    #MEDIA_URL = '/media/'
+   # MEDIA_ROOT = BASE_DIR / 'media'
+#else:
+    # Production: store files on Cloudinary
+    #CLOUDINARY_STORAGE = {
+        #'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
+       # 'API_KEY': env('CLOUDINARY_API_KEY'),
+       # 'API_SECRET': env('CLOUDINARY_API_SECRET'),
+   # }
+#DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# ---------------------------------------------------
+# ---------------------------------------------------
+# Media & File Storage
+# ---------------------------------------------------
 if DEBUG:
     # Local dev: store files on filesystem
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 else:
     # Production: store files on Cloudinary
     CLOUDINARY_STORAGE = {
@@ -45,6 +62,9 @@ else:
         'API_SECRET': env('CLOUDINARY_API_SECRET'),
     }
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
+
 
 # ---------------------------------------------------
 # Installed apps
